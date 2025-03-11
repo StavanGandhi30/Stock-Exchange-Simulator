@@ -1,7 +1,7 @@
 package prices;
 
 import java.util.Objects;
-import Exception.InvalidPriceException;
+import exception.*;
 
 public class Price implements Comparable<Price>{
     private final int cents;

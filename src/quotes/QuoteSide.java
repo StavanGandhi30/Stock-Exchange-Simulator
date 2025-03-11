@@ -1,11 +1,13 @@
-import interfaces.Tradable;
+package quotes;
+
+import dto.TradableDTO;
 import prices.Price;
 import globalconstants.BookSide;
 import java.util.regex.Pattern;
-import dto.TradableDTO;
+import interfaces.Tradable;
 import exception.InvalidParameterException;
 
-class Order implements Tradable {
+class QuoteSide implements Tradable {
     private String user;
     private String product;
     private Price price;
@@ -16,7 +18,7 @@ class Order implements Tradable {
     private int filledVolume = 0;
     private String id;
 
-    public Order(String user, String product, Price price, int originalVolume, BookSide side) throws InvalidParameterException  {
+    public QuoteSide(String user, String product, Price price, int originalVolume, BookSide side) throws InvalidParameterException {
         setUser(user);
         setProduct(product);
         setPrice(price);
@@ -27,12 +29,12 @@ class Order implements Tradable {
     }
 
     private void setId(String user, String product, Price price) {
-        this.id = user + product + price + System.nanoTime();
+        this.id = user + product + price.toString() + System.nanoTime();
     }
 
     private void setUser(String user) throws InvalidParameterException {
         if (!Pattern.matches("[a-zA-Z]{3}", user)){
-            throw new InvalidParameterException("Order(String user, ...): User code must be 3 letters, no spaces, no numbers, no special characters.");
+            throw new InvalidParameterException("QuoteSide(String user, ...): User code must be 3 letters, no spaces, no numbers, no special characters.");
         }
 
         this.user = user;
@@ -40,7 +42,7 @@ class Order implements Tradable {
 
     private void setProduct(String product) throws InvalidParameterException {
         if (!Pattern.matches("[A-Z0-9.]{1,5}", product)) {
-            throw new InvalidParameterException("Order(..., String product, ...): Product must be 1-5 alphanumeric characters with an optional period.");
+            throw new InvalidParameterException("QuoteSide(..., String product, ...): Product must be 1-5 alphanumeric characters with an optional period.");
         }
 
         this.product = product;
@@ -48,7 +50,7 @@ class Order implements Tradable {
 
     private void setPrice(Price price) throws InvalidParameterException {
         if (price == null){
-            throw new InvalidParameterException("Order(..., Price price, ...): Price Object cannot be null.");
+            throw new InvalidParameterException("QuoteSide(..., Price price, ...): Price Object cannot be null.");
         }
 
         this.price = price;
@@ -56,7 +58,7 @@ class Order implements Tradable {
 
     private void setBookSide(BookSide side) throws InvalidParameterException {
         if (side == null){
-            throw new InvalidParameterException("Order(..., BookSide side): BookSide Object cannot be null.");
+            throw new InvalidParameterException("QuoteSide(..., BookSide side): BookSide Object cannot be null.");
         }
 
         this.side = side;
@@ -64,7 +66,7 @@ class Order implements Tradable {
 
     private void setOriginalVolume(int originalVolume) throws InvalidParameterException {
         if (originalVolume <= 0 || originalVolume >= 10000){
-            throw new InvalidParameterException("Order(..., int originalVolume, ...): Original volume must be between 1 and 9999.");
+            throw new InvalidParameterException("QuoteSide(..., int originalVolume, ...): Original volume must be between 1 and 9999.");
         }
 
         this.originalVolume = originalVolume;
@@ -132,7 +134,7 @@ class Order implements Tradable {
 
     @Override
     public String toString() {
-        return String.format("%s %s side order for %s: Price: %s, Orig Vol: %d, Rem Vol: %d, Fill Vol: %d, CXL Vol: %d, ID: %s",
+        return String.format("%s %s side quote for %s: Price: %s, Orig Vol: %d, Rem Vol: %d, Fill Vol: %d, CXL Vol: %d, ID: %s",
                 user, side, product, price, originalVolume, remainingVolume, filledVolume, cancelledVolume, id);
     }
 
@@ -151,4 +153,3 @@ class Order implements Tradable {
         );
     }
 }
-

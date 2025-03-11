@@ -1,7 +1,7 @@
 package prices;
 
 import java.util.*;
-import Exception.*;
+import exception.*;
 
 public abstract class PriceFactory  {
     private static final Map<Integer, Price> priceCache = new HashMap<>();

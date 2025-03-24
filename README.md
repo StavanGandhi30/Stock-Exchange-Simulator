@@ -1,1 +1,1 @@
-# SE350_DSE
+# Stock-Exchange-Simulator
